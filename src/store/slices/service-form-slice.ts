@@ -26,8 +26,9 @@ const serviceFormSlice = createSlice({
     },
     resetServiceField: () => initialServiceFormState,
     loadServiceData: (state, action: PayloadAction<ServiceFormState>) => {
-      return action.payload;
-    }
+      const newState = action.payload;
+      Object.assign(state, newState);
+    }    
   },
 });
 
