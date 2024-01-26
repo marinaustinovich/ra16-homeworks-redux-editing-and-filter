@@ -1,13 +1,17 @@
 import { ChangeEvent, FormEvent, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/index.ts";
+import {
+  ServiceFormState,
+  changeServiceField,
+  initialServiceFormState,
+  loadServiceData,
+  resetServiceField,
+} from "../../store/slices/service-form-slice.ts";
 import {
   addService,
-  changeServiceField,
   updateService,
-  resetServiceField,
-  loadServiceData,
-} from "../../store/actions";
-import { RootState } from "../../store/index.js";
+} from "../../store/slices/service-list-slice.ts";
 
 export const ServiceForm = () => {
   const item = useSelector((state: RootState) => state.serviceForm);
@@ -16,7 +20,11 @@ export const ServiceForm = () => {
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
-      dispatch(changeServiceField(name, value));
+      if (name in initialServiceFormState) {
+        dispatch(
+          changeServiceField({ name: name as keyof ServiceFormState, value })
+        );
+      }
     },
     [dispatch]
   );
@@ -25,9 +33,15 @@ export const ServiceForm = () => {
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (item.isEditing) {
-        dispatch(updateService(item.id, item.name, item.price));
+        dispatch(
+          updateService({
+            id: item.id,
+            name: item.name,
+            price: Number(item.price),
+          })
+        );
       } else {
-        dispatch(addService(item.name, item.price));
+        dispatch(addService({ name: item.name, price: Number(item.price) }));
       }
       dispatch(resetServiceField());
     },

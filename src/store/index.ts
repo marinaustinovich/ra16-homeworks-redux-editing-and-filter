@@ -3,14 +3,16 @@ import {
   serviceFilterReducer,
   serviceFormReducer,
   serviceListReducer,
-} from "../reducers";
+  ServiceFormState,
+  ServiceFilterState,
+  ServiceListState,
+} from "./slices";
 
-/**
- * @typedef {Object} RootState
- * @property {ReturnType<typeof serviceFormReducer>} serviceForm
- * @property {ReturnType<typeof serviceFilterReducer>} serviceFilter
- * @property {ReturnType<typeof serviceListReducer>} serviceList
- */
+export interface RootState {
+  serviceForm: ServiceFormState;
+  serviceFilter: ServiceFilterState;
+  serviceList: ServiceListState;
+}
 
 const store = configureStore({
   reducer: {

@@ -1,21 +1,23 @@
 import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/index.ts";
 import {
+  ServiceFormState,
+  ServiceType,
   loadServiceData,
   removeService,
   resetServiceField,
-} from "../../store/actions";
-import { RootState } from "../../store/index.js";
-import { ServiceFormState } from "../../reducers";
+} from "../../store/slices/index.ts";
 import { useCallback } from "react";
 
 export const ServiceList = () => {
-  const items = useSelector((state: RootState) => state.serviceList);
-  const { filter } = useSelector((state: RootState) => state.serviceFilter);
-  const filteredServices: ServiceFormState[] = items.filter(
-    (service: ServiceFormState) =>
+  const dispatch = useDispatch();
+  const { serviceList } = useSelector((state: RootState) => state.serviceList);
+  const filter = useSelector((state: RootState) => state.serviceFilter.filter);
+
+  const filteredServices: ServiceType[] = serviceList.filter(
+    (service: ServiceType) =>
       service.name.toLowerCase().includes(filter.toLowerCase())
   );
-  const dispatch = useDispatch();
 
   const handleRemove = useCallback(
     (id: string) => {
@@ -28,8 +30,13 @@ export const ServiceList = () => {
   );
 
   const handleChange = useCallback(
-    (o: ServiceFormState) => {
-      dispatch(loadServiceData(o));
+    (o: ServiceType) => {
+      const preparedData: ServiceFormState = {
+        ...o,
+        price: o.price.toString(),
+        isEditing: true,
+      };
+      dispatch(loadServiceData(preparedData));
     },
     [dispatch]
   );

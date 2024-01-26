@@ -1,6 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/index.js";
-import { resetFilter, setFilter } from "../../store/actions";
+import { RootState } from "../../store/index.ts";
+import {
+  resetFilter,
+  setFilter,
+} from "../../store/slices/service-filter-slice.ts";
 
 export const ServiceFilter = () => {
   const dispatch = useDispatch();
